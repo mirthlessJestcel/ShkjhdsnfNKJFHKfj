@@ -11,7 +11,9 @@ client = discord.Client(intents=intents)
 async def on_ready():
     await client.change_presence(
         status=discord.Status.online,
-        activity=discord.Game(name="SBURB"),
+        activity=discord.CustomActivity(
+            name="SBURB (1 out of 1 players) - Land of Dollars and Coins"
+        ),
     )
     print("Logged in as", client.user)
 
