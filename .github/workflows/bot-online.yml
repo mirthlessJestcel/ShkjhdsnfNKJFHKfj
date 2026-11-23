@@ -13,6 +13,6 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install discord.py
-      - run: timeout 5h50m python bot.py || true
+      - run: timeout 350m python bot.py
         env:
           DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_BOT_TOKEN }}
