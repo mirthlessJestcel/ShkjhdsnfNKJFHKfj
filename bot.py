@@ -40,8 +40,7 @@ async def say(
     message: str,
     channel: discord.TextChannel | None = None,
 ):
-    # Two bot sessions overlap on GitHub, so both receive every command.
-    # Only the first one to acknowledge it gets to send the message.
+
     try:
         await interaction.response.defer(ephemeral=True)
     except discord.HTTPException:
