@@ -29,6 +29,8 @@ async def on_ready():
 
 
 @client.tree.command(name="say", description="Make the bot send a message")
+@app_commands.guild_only()
+@app_commands.default_permissions(administrator=True)
 @app_commands.describe(
     message="What to send",
     channel="Where to send it (defaults to this channel)",
@@ -45,9 +47,8 @@ async def say(
     except discord.HTTPException:
         return
 
-    app_info = await client.application_info()
-    if interaction.user.id != app_info.owner.id:
-        await interaction.followup.send("You can't use this.", ephemeral=True)
+    if not interaction.user.guild_permissions.administrator:
+        await interaction.followup.send("Admins only.", ephemeral=True)
         return
 
     target = channel or interaction.channel
