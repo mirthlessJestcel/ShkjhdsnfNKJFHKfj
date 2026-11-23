@@ -11,7 +11,7 @@ client = discord.Client(intents=intents)
 async def on_ready():
     await client.change_presence(
         status=discord.Status.online,
-        activity=discord.CustomActivity(
+        activity=discord.Game(
             name="SBURB (1 out of 1 players) - Land of Dollars and Coins"
         ),
     )
