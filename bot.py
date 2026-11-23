@@ -4,6 +4,15 @@ from discord import app_commands
 
 TOKEN = os.environ["DISCORD_BOT_TOKEN"]
 
+MOD_ROLE_IDS = [1529688981481197619, 1529688953551065188]
+
+
+def can_use_say(member: discord.Member) -> bool:
+    perms = member.guild_permissions
+    if perms.administrator or perms.manage_messages:
+        return True
+    return any(role.id in MOD_ROLE_IDS for role in member.roles)
+
 
 class DollarBot(discord.Client):
     def __init__(self):
@@ -21,16 +30,13 @@ client = DollarBot()
 async def on_ready():
     await client.change_presence(
         status=discord.Status.online,
-        activity=discord.Game(
-            name="SBURB - Land of Dollars and Coins"
-        ),
+        activity=discord.Game(name="SBURB - Land of Dollars and Coins"),
     )
     print("Logged in as", client.user)
 
 
 @client.tree.command(name="say", description="Make the bot send a message")
 @app_commands.guild_only()
-@app_commands.default_permissions(administrator=True)
 @app_commands.describe(
     message="What to send",
     channel="Where to send it (defaults to this channel)",
@@ -40,14 +46,13 @@ async def say(
     message: str,
     channel: discord.TextChannel | None = None,
 ):
-
     try:
         await interaction.response.defer(ephemeral=True)
     except discord.HTTPException:
         return
 
-    if not interaction.user.guild_permissions.administrator:
-        await interaction.followup.send("Admins only.", ephemeral=True)
+    if not can_use_say(interaction.user):
+        await interaction.followup.send("Mods and admins only.", ephemeral=True)
         return
 
     target = channel or interaction.channel
