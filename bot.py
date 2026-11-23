@@ -22,7 +22,7 @@ async def on_ready():
     await client.change_presence(
         status=discord.Status.online,
         activity=discord.Game(
-            name="SBURB (1 out of 1 players) - Land of Dollars and Coins"
+            name="SBURB - Land of Dollars and Coins"
         ),
     )
     print("Logged in as", client.user)
