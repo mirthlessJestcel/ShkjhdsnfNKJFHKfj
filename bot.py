@@ -29,14 +29,14 @@ class DollarBot(discord.Client):
 
     async def setup_hook(self):
         try:
-            await self.tree.sync()
+            synced = await self.tree.sync()
+            print("Synced global commands:", [c.name for c in synced], flush=True)
         except discord.HTTPException as error:
             print("Global sync failed:", error, flush=True)
         try:
-            synced = await self.tree.sync(guild=GUILD)
-            print("Synced guild commands:", [c.name for c in synced], flush=True)
+            await self.tree.sync(guild=GUILD)
         except discord.HTTPException as error:
-            print("Guild sync failed:", error, flush=True)
+            print("Guild cleanup failed:", error, flush=True)
 
 
 client = DollarBot()
@@ -77,7 +77,7 @@ async def on_member_join(member: discord.Member):
         return
 
 
-@client.tree.command(name="say", description="Employ crackersona!!!", guild=GUILD)
+@client.tree.command(name="say", description="Employ crackersona!!!")
 @app_commands.describe(
     message="WHAT YOUR'E SENDING",
     channel="THE CHANNEL YOU'RE SENDING IT TOO, BE CARFUL!!!!!",
