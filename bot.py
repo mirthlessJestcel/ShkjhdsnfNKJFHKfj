@@ -28,8 +28,15 @@ class DollarBot(discord.Client):
         self.tree = app_commands.CommandTree(self)
 
     async def setup_hook(self):
-        await self.tree.sync()
-        await self.tree.sync(guild=GUILD)
+        try:
+            await self.tree.sync()
+        except discord.HTTPException as error:
+            print("Global sync failed:", error, flush=True)
+        try:
+            synced = await self.tree.sync(guild=GUILD)
+            print("Synced guild commands:", [c.name for c in synced], flush=True)
+        except discord.HTTPException as error:
+            print("Guild sync failed:", error, flush=True)
 
 
 client = DollarBot()
@@ -48,7 +55,8 @@ async def on_ready():
         status=discord.Status.online,
         activity=discord.Game(name="SBURB™  - Land of Barb and Darkness"),
     )
-    print("Logged in as", client.user)
+    print("Logged in as", client.user, flush=True)
+    print("In servers:", [guild.id for guild in client.guilds], flush=True)
 
 
 @client.event
