@@ -10,10 +10,14 @@ GUILD_ID = 1529673738809905283
 WELCOME_CHANNEL_ID = 1529795554932953128
 WELCOME_MESSAGE = "hi! welcome to the uhm... whatever! welcome!!! {mention}"
 
+DENIED_MESSAGE = (
+    "```\n{username}@sect7:~$ Inadequate permissions, please log in with "
+    "your SNS ADMIN ACCOUNT to complete this action.\n```"
+)
+
 ALLOWED_USER_IDS = [
     344289949605953537,
     1300607456371671057,
-    1215802650004820010,
     1506710201720635640,
 ]
 
@@ -93,7 +97,9 @@ async def say(
         return
 
     if interaction.user.id not in ALLOWED_USER_IDS:
-        await interaction.followup.send("YOU CAN'T FUCKING DO THIS!", ephemeral=True)
+        await interaction.followup.send(
+            DENIED_MESSAGE.format(username=interaction.user.name), ephemeral=True
+        )
         return
 
     target = channel or interaction.channel
